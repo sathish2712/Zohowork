@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class ProductUpdate extends Product {
-	//checks if prod is already present
+	//checks if product ID is already present
 	public boolean isExist(int id) throws FileNotFoundException {
 		File file = new File("D:/data/inventory.text");
 		Scanner scan = new Scanner(file);
@@ -18,7 +18,7 @@ public class ProductUpdate extends Product {
 		return false;
 		
 	}
-	
+	//if not exist then append the data to file
 	public void productupdate(int id, String name, int cost) throws IOException{
 		try {
 			String data = String.valueOf(id) + "       " + name + "       " + String.valueOf(cost);
