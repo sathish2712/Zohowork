@@ -1,8 +1,7 @@
 package com.zoho.backend_Zoho;
 
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.io.*;
 
 import jakarta.ws.rs.Consumes;
@@ -15,8 +14,10 @@ import jakarta.ws.rs.core.Response;
 
 
 @Path("store")
-public class ProductTest {
-
+public class ProductTest{
+	
+	static ArrayList<Customer> customerInvoicePersist = new ArrayList<>();
+	
 	@POST
 	@Path("/admin")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -38,20 +39,59 @@ public class ProductTest {
 	@POST
 	@Path("/customer")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response customerJson(@QueryParam("name") String Name, @QueryParam("gender") String gender, @QueryParam("phone") String phone, @QueryParam("state") String state, @QueryParam("city") String city, @QueryParam("products") String products, @QueryParam("ptype") String ptype, @QueryParam("pdetail") String pdetail) throws IOException {
-		CustomerInvoice cust = new CustomerInvoice();
-		cust.setName(Name);
-		cust.setGender(gender);
-		cust.setPhone(phone);
-		cust.setState(state);
-		cust.setCity(city);
-//		cust.setProducts(products);
-//		cust.setPaymentType(ptype);
-//		cust.setPayPin(pdetail);
-		cust.createInvoice(cust.getName(),cust.getGender(),cust.getPhone(),cust.getState(),cust.getCity());
+	public Response customerJson(@QueryParam("name") String Name, @QueryParam("gender") String gender, @QueryParam("phone") String phone, @QueryParam("state") String state, @QueryParam("city") String city, @QueryParam("products") String products, @QueryParam("ptype") String ptype, @QueryParam("pdetail") String pdetail,@QueryParam("ctype") String ctype) throws IOException {
+		
+		//thread for update invoice persist
+		try {
+			Thread persistInvoice = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					Customer customer = new Customer();
+					customer.setName(Name);
+					customer.setGender(gender);
+					customer.setPhone(phone);
+					customer.setState(state);
+					customer.setCity(city);
+					customer.setProducts(products);
+					customer.setPaymentType(ptype);
+					customer.setPayPin(pdetail);
+					customer.setCustType(ctype);
+					customerInvoicePersist.add(customer);
+				}
+				
+			});
+			
+			//Thread for generate invoice
+			Thread generateInvoice = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						CustomerInvoice cust = new CustomerInvoice();
+						cust.createInvoice(Name, gender,phone,state,city,products,ptype,pdetail,ctype);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			});
+			persistInvoice.setPriority(Thread.MIN_PRIORITY);
+			generateInvoice.setPriority(Thread.MAX_PRIORITY);
+			
+	        persistInvoice.start();
+	        generateInvoice.start();
+	        
+		}catch(Exception e) {
+			e.getStackTrace();
+			return Response.status(201).build();
+			
+		}
+		
+
 		return Response.status(200).build();
 		
 	}
-	
+
 	
 }

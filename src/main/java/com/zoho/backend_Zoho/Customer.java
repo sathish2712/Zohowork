@@ -9,24 +9,7 @@ public class Customer {
 	private String products;
 	private String paymentType;
 	private String payPin;
-	public String getProducts() {
-		return products;
-	}
-	public void setProducts(String products) {
-		this.products = products;
-	}
-	public String getPaymentType() {
-		return paymentType;
-	}
-	public void setPaymentType(String paymentType) {
-		this.paymentType = paymentType;
-	}
-	public String getPayPin() {
-		return payPin;
-	}
-	public void setPayPin(String payPin) {
-		this.payPin = payPin;
-	}
+	private String custType;
 	public String getName() {
 		return name;
 	}
@@ -57,5 +40,30 @@ public class Customer {
 	public void setCity(String city) {
 		this.city = city;
 	}
-
+	public String getProducts() {
+		return products;
+	}
+	public void setProducts(String products) {
+		this.products = products;
+	}
+	public String getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+	public String getPayPin() {
+		return payPin;
+	}
+	public void setPayPin(String payPin) {
+		this.payPin = payPin;
+	}
+	public String getCustType() {
+		return custType;
+	}
+	public void setCustType(String custType) {
+		this.custType = custType;
+	}
+	
+	
 }
