@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Scanner;
 public class CustomerInvoice extends Thread{
 	
-	static int invoiceNumber = 1;
+	private CalculateGST gst = new CalculateGST();
+	
+	private static int invoiceNumber = 1;
 
 	public void createInvoice(String name, String gender, String phone, String state, String city, String products,
 			String ptype, String pdetail, String ctype) throws IOException {
@@ -33,6 +35,7 @@ public class CustomerInvoice extends Thread{
 		File f = new File("D:/data/invoices/customer_invoice_" + invoiceNumber + ".text");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(f));
 		writer.write("Date  " + dt[0] + "        Time "+ dt[1]);
+		writer.newLine();
 		
 		
 		for(int i = 0 ; i < prods.length ; i++) {
@@ -40,7 +43,7 @@ public class CustomerInvoice extends Thread{
 			File file = new File("D:/data/inventory.text");
 			Scanner scan = new Scanner(file);
 			while(scan.hasNextLine()) {
-				String[] arr = scan.nextLine().split(" ");
+				String[] arr = scan.nextLine().split(" ");			
 				if(arr[1].trim().equals(product)) {
 					totalCost += Integer.parseInt(arr[2].trim());
 					productMap.put(arr[1].trim(), Integer.parseInt(arr[2].trim()));
@@ -49,24 +52,36 @@ public class CustomerInvoice extends Thread{
 		}
 		
 		writer.write("Customer Name : " + name);
+		writer.newLine();
 		writer.write("Customer Gender : " + gender);
+		writer.newLine();
 		writer.write("Phone Number : " + phone);
+		writer.newLine();
 		writer.write("State " + state);
+		writer.newLine();
 		writer.write("City " + city);
+		writer.newLine();
 		writer.write(blankSpace);
+		writer.newLine();
 		
-		writer.write("-------Products purchased-------");
+		writer.write("   Products purchased   ");
+		writer.newLine();
 		for(Map.Entry<String, Integer> entry : productMap.entrySet()) {
 			writer.write(entry.getKey() + "      " + entry.getValue());
+			writer.newLine();
 		}
 		writer.write(blankSpace);
+		writer.newLine();
 		writer.write("Payment Method : " + ptype);
+		writer.newLine();
 		writer.write("Your total purchased amount : " + totalCost);
+		writer.newLine();
 		writer.write("You are "+ ctype);
+		writer.newLine();
 		
 		writer.close();
-		System.out.println(productMap);
 		
+		invoiceNumber++;
 	}
 	
 }

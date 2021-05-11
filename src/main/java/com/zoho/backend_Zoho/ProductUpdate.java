@@ -21,7 +21,7 @@ public class ProductUpdate extends Product {
 	//if not exist then append the data to file
 	public void productupdate(int id, String name, int cost) throws IOException{
 		try {
-			String data = String.valueOf(id) + "       " + name + "       " + String.valueOf(cost);
+			String data = String.valueOf(id) + " " + name + " " + String.valueOf(cost);
 			File f = new File("D:/data/inventory.text");
 			BufferedWriter writer = new BufferedWriter(new FileWriter(f, true));
 			writer.write(data);
