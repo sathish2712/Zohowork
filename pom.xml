@@ -48,12 +48,13 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
         </dependency>
-        <!-- uncomment this to get JSON support
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-json-jackson -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-binding</artifactId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>3.0.2</version>
         </dependency>
-        -->
+
     </dependencies>
     <properties>
         <jersey.version>3.0.2</jersey.version>
