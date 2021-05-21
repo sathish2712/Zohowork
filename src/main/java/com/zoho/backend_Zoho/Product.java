@@ -54,13 +54,14 @@ public class Product {
 	}
 
 	public boolean isIdExist(){
+		String path = "D:\\data\\Inventory.text";
+		File file = new File(path);
+		Scanner scan = null;
 		try{
-			String path = "D:\\data\\Inventory.text";
-			File file = new File(path);
 			if(!file.exists()){
 				return false;
 			}
-			Scanner scan = new Scanner(file);
+			scan = new Scanner(file);
 			while(scan.hasNextLine()){
 				String[] arr = scan.nextLine().split(" ");
 				if(arr[0].trim().equals(getProductId()) || arr[1].trim().equalsIgnoreCase(getProductName())){
@@ -71,6 +72,13 @@ public class Product {
 		}catch (Exception e){
 			System.out.println(e);
 			return false;
+		}
+		finally {
+			try{
+				scan.close();
+			}catch (Exception ex){
+				System.out.println(ex);
+			}
 		}
 		return false;
 	}
@@ -94,7 +102,7 @@ public class Product {
 			try {
 				fileOutputStream.close();
 			}catch (Exception ex){
-				System.out.println(ex);
+				System.out.println(this.getClass());
 			}
 		}
 		return true;

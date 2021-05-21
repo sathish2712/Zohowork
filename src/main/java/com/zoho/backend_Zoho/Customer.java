@@ -77,10 +77,11 @@ public class Customer {
 	}
 	
 	public boolean createInvoice(){
-		FileOutputStream fileOutputStream = null;
-		FileOutputStream writeToInvoice = null;
 		String inventoryFilePath = "D:\\data\\Inventory.text";
 		String invoiceFilePath = "D:\\data\\CustomerInvoices\\customer_invoice_" + invoiceNumber;
+		FileOutputStream writeToInvoice = null;
+		FileOutputStream fileOutputStream = null;
+		Scanner scan = null;
 		Map<String,String> productsMap = new HashMap<>();
 		try{
 			boolean isProductNoStock = false;
@@ -90,32 +91,37 @@ public class Customer {
 			String[] dt = dtf.format(now).split(" ");
 			String[] products = getProducts().split(",");
 			StringBuilder fileWriteData = new StringBuilder();
-			Scanner scan = new Scanner(new File(inventoryFilePath));
 			for(int i = 0 ; i < products.length ; ++i){
-				while(scan.hasNextLine()){
+				scan = new Scanner(new File(inventoryFilePath));
+				while(scan.hasNextLine()) {
 					String[] arr = scan.nextLine().split(" ");
-					if(products[i].trim().equalsIgnoreCase(arr[1]) && getCustType().trim().equalsIgnoreCase(arr[4])){
-						if(Integer.parseInt(arr[2].trim()) > 0){
+					if (products[i].trim().equalsIgnoreCase(arr[1]) && getCustType().trim().equalsIgnoreCase(arr[4])) {
+						if (Integer.parseInt(arr[2].trim()) > 0) {
 							//replace the quantity in file
 							arr[2] = String.valueOf(Integer.parseInt(arr[2]) - 1);
 							fileWriteData.append(arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3] + " " + arr[4]);
-							productsMap.put(arr[1],arr[3]);
+							productsMap.put(arr[1], arr[3]);
 							totalCost += Integer.parseInt(arr[3]);
 							fileWriteData.append("\n");
-						}else{
+						} else {
 							isProductNoStock = true;
 						}
-					}else{
+					} else {
 						fileWriteData.append(arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3] + " " + arr[4]);
 						fileWriteData.append("\n");
+					}
+					if(i != products.length-1){
+						fileWriteData.delete(0,fileWriteData.length());
 					}
 				}
 			}
 			scan.close();
-			byte[] byteArray = fileWriteData.toString().getBytes();
 			fileOutputStream = new FileOutputStream(inventoryFilePath);
+			byte[] byteArray = fileWriteData.toString().getBytes();
 			fileOutputStream.write(byteArray);
+			fileOutputStream.close();
 
+			//File object writer for invoice generation
 			writeToInvoice = new FileOutputStream(invoiceFilePath);
 			StringBuffer invoiceData = new StringBuffer();
 			invoiceData.append(dt[0]);
@@ -158,8 +164,8 @@ public class Customer {
 		finally {
 			try{
 				System.out.println("Invoice has been successfully created! :) ");
-				fileOutputStream.close();
 				writeToInvoice.close();
+				fileOutputStream.close();
 			}catch (Exception e){
 				System.out.println(e);
 			}
