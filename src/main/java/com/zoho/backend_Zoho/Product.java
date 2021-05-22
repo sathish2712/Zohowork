@@ -109,10 +109,11 @@ public class Product {
 	}
 	public void constructReport(Map<String , Object> map){
 		Map<String,Object> productMap = new HashMap<>();
+		Scanner scan = null;
 		try{
 			String path = "D:\\data\\Inventory.text";
 			File file = new File(path);
-			Scanner scan = new Scanner(file);
+			scan = new Scanner(file);
 			List<Map<String,Object>> dataList = new ArrayList<>();
 			while(scan.hasNextLine()){
 				String[] arr = scan.nextLine().split(" ");
@@ -122,7 +123,6 @@ public class Product {
 				dataMap.put(PRODUCT_QUANTITY,arr[2]);
 				dataMap.put(PRODUCT_COST,arr[3]);
 				dataMap.put(PRODUCT_TYPE,arr[4]);
-
 				dataList.add(dataMap);
 			}
 			productMap.put(PRODUCT,dataList);
@@ -131,6 +131,13 @@ public class Product {
 		}catch(Exception e){
 			map.put(JSON_STRING , JSON_ERROR);
 			System.out.println(e);
+		}
+		finally {
+			try {
+				scan.close();
+			}catch (Exception ex){
+				System.out.println(ex);
+			}
 		}
 	}
 }

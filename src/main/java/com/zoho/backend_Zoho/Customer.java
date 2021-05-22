@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Customer {
+
+	private Report report;
 
 	private static int invoiceNumber = 1;
 
@@ -142,8 +142,10 @@ public class Customer {
 			invoiceData.append("----------------------");
 			invoiceData.append("Products purchased");
 			invoiceData.append("\n");
+			List<String> custProducts = new ArrayList<>();
 			for(Map.Entry<String,String> map : productsMap.entrySet()){
 				invoiceData.append(map.getKey() + "   " + map.getValue());
+				custProducts.add(map.getKey());
 				invoiceData.append("\n");
 			}
 			invoiceData.append("----------------------");
@@ -157,6 +159,17 @@ public class Customer {
 				return false;
 			}
 			invoiceNumber++;
+
+			//add customer data to Report class
+			report = new Report();
+			report.setCustomerName(getName());
+			report.setCustomerGender(getGender());
+			report.setCustomerPhone(getPhone());
+			report.setCustomerCity(getCity());
+			report.setCustomerType(getCustType());
+			report.setCustomerProducts(custProducts);
+			report.setTotalAmount(totalCost);
+			report.addDetails();
 		}
 		catch (Exception e){
 			System.out.println(e);
@@ -172,4 +185,7 @@ public class Customer {
 		}
 		return true;
 	}
+
+
+
 }

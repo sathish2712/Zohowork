@@ -67,6 +67,7 @@ public class ProductTest{
 		return Response.status(208).build();
 	}
 
+
 	@POST
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -140,5 +141,23 @@ public class ProductTest{
 			System.out.println(e);
 		}
 		return resultMap;
+	}
+
+	@POST
+	@Path("/report")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String,Object> getReport(@QueryParam("sortBy") String sortby , @QueryParam("top") String topN){
+		Map<String,Object> map = new HashMap<>();
+		try{
+			Report report = new Report();
+			report.setSortBy(sortby);
+			report.setTopN(topN);
+			report.generateReport(map);
+			Collections.sort(Report.customerReport);
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return map;
 	}
 }

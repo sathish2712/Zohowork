@@ -27,7 +27,7 @@ public class CustomerSignup {
     public boolean signupCustomer(){
         try{
             String path = "D:\\data\\CustomerData\\cred.text";
-            if(!isCustomerExist(getName(),path)){
+            if(!isCustomerExist(path)){
                 FileOutputStream file = new FileOutputStream(path,true);
                 String str = getName() + " " + getPassword();
                 str = str + "\n";
@@ -44,7 +44,7 @@ public class CustomerSignup {
         }
         return true;
     }
-    public boolean isCustomerExist(String name, String path){
+    public boolean isCustomerExist(String path){
         boolean isPresent = false;
         Scanner scan = null;
         try{
